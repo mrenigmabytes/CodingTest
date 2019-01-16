@@ -1,5 +1,6 @@
 Create a processing system that processes files that are present in a given location X. 
 Each file is "processed" according to "instruction-sets" that are received via a REST API.
+Assume that the API can be getting hundreds of process requests per minute. We want to make a system that can tackle such loads.
 The "instruction-set" for a given file can have a priority 1-5 1 being highest and 5 being lowest.
 
 The time limit is 1 hour and you should choose what components to tackle first to show your applied knowledge.
