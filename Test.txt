@@ -1,0 +1,60 @@
+Create a processing system that processes files that are present in a given location X. 
+Each file is "processed" according to "instruction-sets" that are received via a REST API.
+The "instruction-set" for a given file can have a priority 1-5 1 being highest and 5 being lowest.
+
+The time limit is 1 hour and you should choose what components to tackle first to show your applied knowledge.
+
+A REST API service receives event information with the following JSON structure (Not necessary to create full API infrastructure) only relevant methods can be created.
+{
+	"Event":
+	{
+		"eventId":Guid,
+		"fileName":String,
+		"eventProcess": string,
+		"timeStamp":datetime,
+		"priority":integer,
+	}
+}
+
+"eventId" is a Guid used to identify a particular unique file. 
+"fileName" is the name of a file in a known location X -> for simplicity the name of the file is the same as the eventId Guid.
+"eventProcess" tells us the type of processing that we want to execute in "filename"
+"timeStamp" is the datetime value in which the event was created.
+"priority" is a priority level for the eventId. All process instructions for the same eventId have the same priority. 
+
+The service API post never arrives before the file is uploaded to location X == The file is always present before the API is called.
+The file is a text file with words separated by a space character. 
+The amount of words can go up to N words per file and word sizes can go up to size s. 
+There are 3 possible instruction sets described below.
+A single file can have multiple instructions assigned to it via multiple API calls with the same eventId (before a "DoNothing") event is received.
+
+[flags] 
+public enum EventProcessEnum : byte
+{
+	DoNothing = 0x00,
+	SortWordSize = 0x01, // Example: Input = ["ACBCDE","ABE","CBDFAHF","AC","CAB"] => ["AC",ABE,CAB,ACBCDE,CBDFAHF}
+	SortWordGroup = 0x02, // Example: Input = {DOG, PIG, GIRAFFE, CAT, TIGER, EAGLE} => {CAT,DOG,PIG,EAGLE,TIGER,GIRAFFE} hint: SortWordGroup = SortWordSize+individual group sort.
+	SortLetters = 0x04, // EXAMPLE: INPUT = {DOG, PIG, GIRAFFE, CAT, TIGER, EAGLE} => {DGO, GIP, AEFFGIR,ACT,EGIRT,AEEGL}
+}
+
+Include an API method that receives a guid eventId and resturns a status as a simple string identifier: "NotReceived", "Pending", "Processing", "Completed".
+NotReceived = The GUID is not found therefore has not been received.
+Pending = The request has been received, but file has not begun processing.
+Processing = Request has been received, but is not completed.
+Completed = All processing events have been completed.
+
+Different files can be processed in parallel up to X at a time. Dictated by a variable (in this case the person conducting the interview, could be dynamic based on loads)
+
+A file is considered "processed" and it should have a copy created at same location who's filename should be preceded with "Processed_" when a final "DoNothing" eventProcess instruction has been received and all preceeding instructions have been completed.
+
+Instruction sets for the same eventId must be processed in the order they came in i.e ordered by "timeStamp".
+Instruction sets for different eventIds dont have to be processed in ordered fashion.
+Considering the max parallel files being processed, pending files with instruction sets might be present. If a higher priority item arrives, the queue should be adjustec accordingly. 
+For similar priority items...extra thought should be placed on file size, instruction sets received, instruction set time complexity etc... This to order them and distribute them in the most optimal fashion.
+
+
+
+ 
+
+
+
