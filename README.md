@@ -10,7 +10,7 @@ I dont tell the candidates what I'm looking for, but the problem implies the fol
 *prioritization/scheduling
 *multithreading
 *concurrency
-*searching/sorging ( different load sizes have better sorting/searching algorithms)
+*searching/sorting ( different load sizes have better sorting/searching algorithms)
 *IO
 *RestServices
 *IPC
